@@ -1,4 +1,4 @@
-#!/bin/bash -e
+#!/bin/bash -eu
 wget -c https://downloads.raspberrypi.org/raspbian_lite/images/raspbian_lite-2016-03-18/2016-03-18-raspbian-jessie-lite.zip -O 2016-03-18-raspbian-jessie-lite.zip
 unzip 2016-03-18-raspbian-jessie-lite.zip
 
@@ -24,7 +24,4 @@ truncate -s 32G outdisk
 sudo virt-resize --expand /dev/sda2 2016-03-18-raspbian-jessie-lite.img outdisk
 rm 2016-03-18-raspbian-jessie-lite.img
 
-rm -rf /dev/shm/qemu-rpi
-mkdir /dev/shm/qemu-rpi
-ln -sf /dev/shm/qemu-rpi/swap ./swap
-qemu-img create -f raw $(readlink ./swap) 1G
+./mkswap.sh
