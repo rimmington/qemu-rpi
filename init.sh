@@ -10,9 +10,21 @@ sudo sed -i 's/^\/dev\/mmcblk/#\/dev\/mmcblk/g' mnt/etc/fstab
 #sudo nano mnt/etc/fstab
 #sudo echo '' >> mnt/etc/apt/sources.list
 #sudo echo '' >> mnt/etc/apt/preferences
+cat <<"EOF" > mnt/home/pi/.bashrc
+
+if ! (swapon --show | grep sdb >/dev/null); then
+    sudo mkswap /dev/sdb
+    sudo swapon /dev/sdb
+fi;
+EOF
 sudo umount mnt
 rmdir mnt
 
 truncate -s 32G outdisk
 sudo virt-resize --expand /dev/sda2 2016-03-18-raspbian-jessie-lite.img outdisk
 rm 2016-03-18-raspbian-jessie-lite.img
+
+rm -rf /dev/shm/qemu-rpi
+mkdir /dev/shm/qemu-rpi
+ln -sf /dev/shm/qemu-rpi/swap ./swap
+qemu-img create -f raw $(readlink ./swap) 1G
