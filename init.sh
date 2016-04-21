@@ -8,8 +8,20 @@ sudo sed -i 's/^/#/g' mnt/etc/ld.so.preload
 #sudo nano mnt/etc/ld.so.preload
 sudo sed -i 's/^\/dev\/mmcblk/#\/dev\/mmcblk/g' mnt/etc/fstab
 #sudo nano mnt/etc/fstab
-#sudo echo '' >> mnt/etc/apt/sources.list
-#sudo echo '' >> mnt/etc/apt/preferences
+echo 'deb http://ftp.us.debian.org/debian unstable main non-free contrib' | sudo tee -a mnt/etc/apt/sources.list > /dev/null
+cat <<"EOF" | sudo tee mnt/etc/apt/preferences > /dev/null
+Package: *
+Pin: release a=stable
+Pin-Priority: 700
+
+Package: *
+Pin: release a=testing
+Pin-Priority: 650
+
+Package: *
+Pin: release a=unstable
+Pin-Priority: 600
+EOF
 cat <<"EOF" > mnt/home/pi/.bashrc
 
 if ! (swapon --show | grep sdb >/dev/null); then
