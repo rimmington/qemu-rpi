@@ -23,5 +23,3 @@ rmdir mnt
 truncate -s 32G outdisk
 sudo virt-resize --expand /dev/sda2 2016-03-18-raspbian-jessie-lite.img outdisk
 rm 2016-03-18-raspbian-jessie-lite.img
-
-./mkswap.sh
